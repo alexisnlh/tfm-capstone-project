@@ -1,0 +1,36 @@
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.pyc
+
+# Entornos
+venv/
+env/
+.env
+.venv
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Data files (excepto los que queremos versionar)
+data/raw/*.csv
+data/processed/*.csv
+*.pkl
+
+# Models
+models/*.pkl
+
+# Reports
+reports/*.html
+reports/*.pdf
