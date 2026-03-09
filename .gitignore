@@ -23,14 +23,20 @@ env/
 Thumbs.db
 desktop.ini
 
-# Data files (excepto los que queremos versionar)
-data/raw/*.csv
-data/processed/*.csv
-*.pkl
+# Notebooks files
+notebooks_individuales/
+
+# Data files
+src/
 
 # Models
 models/*.pkl
 
 # Reports
-reports/*.html
-reports/*.pdf
+reports/
+
+# Agents AI
+.claude
+
+# Github WF
+*/workflows

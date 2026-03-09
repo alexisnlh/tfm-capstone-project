@@ -35,7 +35,7 @@
 <a id="descripción-del-proyecto"></a>
 ## 🎯  Descripción del Proyecto
 
-DSMarket (anteriormente TradiStores) es una cadena de supermercados en Estados Unidos que busca revolucionar sus procesos mediante transformación digital. Como Nicole, científica de datos sénior del departamento financiero, trabajaremos en la optimización de predicciones de ventas y diversos procesos empresariales mediante técnicas de Data Science e Inteligencia Artificial.
+DSMarket (anteriormente TradiStores) es una cadena de supermercados en Estados Unidos que busca revolucionar sus procesos mediante transformación digital. Como científico de datos sénior del departamento financiero, trabajaremos en la optimización de predicciones de ventas y diversos procesos empresariales mediante técnicas de Data Science e Inteligencia Artificial.
 
 ### Contexto del Negocio
 
@@ -56,33 +56,13 @@ El objetivo principal es mejorar las predicciones de ventas que actualmente se r
 ```
 tfm-capstone-project/
 │
-├── data/
-│   ├── raw/                          # ⚠️ SOLO LECTURA - NO MODIFICAR
-│   │   ├── item_sales.csv
-│   │   ├── item_prices.csv
-│   │   └── daily_calendar_with_events.csv
-│   │
-│   └── processed/                # Datos procesados y limpios
+├── src/
+│   ├── data/                       # Datos procesados y limpios
+│   ├── features/               # Datos del feature engineering
+│   ├── models/                 # Modelos entrenados guardados
+│   └── visualization/          # Gráficos y visualizaciones
 │
-├── notebooks_individuales/                 # Notebooks finales de cada integrante
-│   ├── gabriela_alberico.ipynb
-│   ├── jorge_silva.ipynb
-│   ├── roberto_tunzi.ipynb
-│   ├── matias_lannes.ipynb
-│   └── alexis_labrador.ipynb
-│
-├── src/                         # Código fuente del proyecto
-│   ├── data/                   # Scripts de carga y procesamiento
-│   ├── features/               # Scripts de feature engineering
-│   ├── models/                 # Scripts de entrenamiento de modelos
-│   └── visualization/          # Scripts de visualización
-│
-├── models/                     # Modelos entrenados guardados
-│
-├── reports/                    # Reportes generados
-│   └── figures/                # Gráficos y visualizaciones
-│
-├── Grupo_2_12_dscesp_0925_tfm_ds_market.ipynb              # ⭐ Notebook final para entregar
+├── Grupo_2_dscesp_0925_tfm_ds_market.ipynb              # ⭐ Notebook final para entregar
 ├── requirements.txt            # Dependencias del proyecto
 ├── LICENSE                     # Licencia del proyecto
 └── README.md                   # Este archivo
@@ -275,7 +255,9 @@ git merge develop
 - **NumPy** - Cálculos numéricos
 - **Scikit-learn** - Machine Learning
 - **Matplotlib/Seaborn/Plotly** - Visualización
-- **Statsmodels/Prophet** - Series temporales
+- **Ridge / XGBoost / LightGBM / CatBoost** — Modelos de predicción
+- **Optuna** — Optimización bayesiana de hiperparámetros
+- **Power BI** — Dashboard de resultados
 
 ---
 
