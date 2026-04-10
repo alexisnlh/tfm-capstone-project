@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=900">
+<title>DSMarket — Guía de Presentación TFM</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Georgia, Arial, sans-serif;
+    background: #f5f6fa;
+    color: #222;
+    width: 860px;
+    margin: 0 auto;
+    padding: 40px 0 60px;
+  }
+
+  /* PORTADA */
+  .cover {
+    background: linear-gradient(160deg, #0d2444 0%, #1a4a7a 60%, #2a6aaa 100%);
+    color: white;
+    border-radius: 12px;
+    padding: 120px 60px;
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .cover h1 { font-size: 52px; font-weight: 800; letter-spacing: -1px; margin-bottom: 14px; }
+  .cover p { font-size: 18px; color: #c8dff5; margin-bottom: 40px; }
+  .cover .badge {
+    display: inline-block;
+    border: 1.5px solid rgba(255,255,255,0.4);
+    border-radius: 30px;
+    padding: 10px 28px;
+    font-size: 14px;
+    color: #ddeeff;
+  }
+
+  /* SECCIONES */
+  .section {
+    background: white;
+    border-radius: 12px;
+    padding: 40px 48px;
+    margin-bottom: 32px;
+    border: 1px solid #e2e8f0;
+    page-break-inside: avoid;
+  }
+  .section-divider {
+    border: none;
+    border-top: 2px solid #e2e8f0;
+    margin: 36px 0;
+  }
+
+  h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a3a5c;
+    border-left: 5px solid #1a6aaa;
+    padding-left: 16px;
+    margin-bottom: 28px;
+  }
+  h3 {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #4a6080;
+    margin: 28px 0 14px;
+  }
+
+  /* SCRIPT BOX */
+  .script-box {
+    background: #f0f6ff;
+    border-left: 4px solid #1a6aaa;
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin: 14px 0;
+  }
+  .script-box .label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #1a6aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .script-box p {
+    font-size: 14px;
+    font-style: italic;
+    color: #2c3e50;
+    line-height: 1.65;
+  }
+
+  /* TIP BOX */
+  .tip-box {
+    background: #fffbea;
+    border: 1px solid #f0d060;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 13.5px;
+    color: #5a4000;
+    line-height: 1.6;
+  }
+  .tip-box strong { color: #7a5500; }
+
+  /* NOTE BOX */
+  .note-box {
+    background: #f0fff4;
+    border: 1px solid #68d391;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 13.5px;
+    color: #1a4a2a;
+    line-height: 1.6;
+  }
+  .note-box strong { color: #1a6a2a; }
+
+  /* ALERT BOX */
+  .alert-box {
+    background: #fff5f5;
+    border: 1px solid #fc8181;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 13.5px;
+    color: #742a2a;
+    line-height: 1.6;
+  }
+  .alert-box strong { color: #9b2c2c; }
+
+  /* KPI CARDS */
+  .kpi-grid {
+    display: grid;
+    gap: 14px;
+    margin: 16px 0;
+  }
+  .kpi-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .kpi-grid.cols-5 { grid-template-columns: repeat(5, 1fr); }
+  .kpi-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+  .kpi-card {
+    border: 1.5px solid #e2e8f0;
+    border-top: 4px solid #1a6aaa;
+    border-radius: 8px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .kpi-card .kpi-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #7a8899;
+    margin-bottom: 6px;
+  }
+  .kpi-card .kpi-value {
+    font-size: 26px;
+    font-weight: 800;
+    color: #1a3a5c;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .kpi-card .kpi-sub {
+    font-size: 11px;
+    color: #9aa8b8;
+    line-height: 1.4;
+  }
+  .kpi-card.red { border-top-color: #e53e3e; }
+  .kpi-card.red .kpi-value { color: #e53e3e; }
+  .kpi-card.orange { border-top-color: #dd6b20; }
+  .kpi-card.orange .kpi-value { color: #dd6b20; }
+  .kpi-card.purple { border-top-color: #6b46c1; }
+  .kpi-card.purple .kpi-value { color: #6b46c1; }
+  .kpi-card.green { border-top-color: #276749; }
+  .kpi-card.green .kpi-value { color: #276749; }
+
+  /* TABLA MODELOS */
+  .metrics-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin: 14px 0;
+  }
+  .metrics-table th {
+    background: #1a3a5c;
+    color: white;
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .metrics-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .metrics-table tr:nth-child(even) td { background: #f8fafc; }
+  .metrics-table tr.winner td {
+    background: #f0fff4;
+    font-weight: 700;
+    color: #276749;
+  }
+  .metrics-table tr.winner td:first-child { color: #276749; }
+
+  /* CLUSTER CARDS */
+  .cluster-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 14px 0;
+  }
+  .cluster-card {
+    border-radius: 8px;
+    padding: 16px 18px;
+    border: 1.5px solid #e2e8f0;
+  }
+  .cluster-card .c-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .cluster-card .c-body { font-size: 13px; color: #444; line-height: 1.55; margin-bottom: 10px; }
+  .cluster-card .c-action {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 20px;
+    color: white;
+  }
+  .cluster-card.green { border-color: #68d391; background: #f0fff4; }
+  .cluster-card.green .c-title { color: #276749; }
+  .cluster-card.green .c-action { background: #276749; }
+  .cluster-card.blue { border-color: #90cdf4; background: #ebf8ff; }
+  .cluster-card.blue .c-title { color: #2b6cb0; }
+  .cluster-card.blue .c-action { background: #2b6cb0; }
+  .cluster-card.orange { border-color: #fbd38d; background: #fffaf0; }
+  .cluster-card.orange .c-title { color: #c05621; }
+  .cluster-card.orange .c-action { background: #c05621; }
+  .cluster-card.purple { border-color: #d6bcfa; background: #faf5ff; }
+  .cluster-card.purple .c-title { color: #553c9a; }
+  .cluster-card.purple .c-action { background: #553c9a; }
+  .cluster-card.red { border-color: #feb2b2; background: #fff5f5; }
+  .cluster-card.red .c-title { color: #9b2c2c; }
+  .cluster-card.red .c-action { background: #9b2c2c; }
+  .cluster-card.wide { grid-column: 1 / -1; }
+
+  /* STEPS */
+  .steps { list-style: none; margin: 14px 0; }
+  .steps li {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+  .steps li .step-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #1a3a5c;
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .steps li .step-content .step-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a3a5c;
+    margin-bottom: 3px;
+  }
+  .steps li .step-content .step-desc {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.55;
+  }
+
+  /* CIERRE */
+  .closing-box {
+    background: #1a3a5c;
+    color: white;
+    border-radius: 10px;
+    padding: 36px 40px;
+    text-align: center;
+    margin: 16px 0;
+  }
+  .closing-box h3 {
+    color: white;
+    font-size: 20px;
+    text-transform: none;
+    letter-spacing: 0;
+    margin-bottom: 18px;
+  }
+  .closing-box p {
+    font-size: 14px;
+    color: #a8c4e8;
+    line-height: 1.7;
+    margin-bottom: 10px;
+  }
+  .closing-box p strong { color: white; }
+  .closing-box .final { font-size: 15px; font-weight: 700; color: white; margin-top: 16px; }
+
+  /* DEFINICION ALERTAS */
+  .alert-def-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 14px 0;
+  }
+  .alert-def-card {
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+  .alert-def-card.yellow {
+    background: #fffbea;
+    border: 1.5px solid #f6d860;
+  }
+  .alert-def-card.red {
+    background: #fff5f5;
+    border: 1.5px solid #fc8181;
+  }
+  .alert-def-card .ad-emoji { font-size: 20px; margin-bottom: 6px; }
+  .alert-def-card .ad-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .alert-def-card.yellow .ad-title { color: #7a5500; }
+  .alert-def-card.red .ad-title { color: #9b2c2c; }
+  .alert-def-card .ad-def { font-size: 13px; line-height: 1.6; color: #444; }
+  .alert-def-card .ad-threshold {
+    font-size: 13px;
+    font-weight: 700;
+    margin-top: 8px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    display: inline-block;
+  }
+  .alert-def-card.yellow .ad-threshold { background: #fef3c7; color: #78350f; }
+  .alert-def-card.red .ad-threshold { background: #fee2e2; color: #7f1d1d; }
+
+  .def-note {
+    background: #f0f6ff;
+    border: 1px solid #bee3f8;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 13px;
+    color: #1a365d;
+    line-height: 1.65;
+  }
+  .def-note strong { color: #1a4a7a; }
+</style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="cover">
+  <h1>DSMarket</h1>
+  <p>Sistema de Predicción de Ventas y Gestión de Abastecimiento</p>
+  <div class="badge">Guía de Presentación TFM · Defensa del Máster</div>
+</div>
+
+<!-- 0. APERTURA -->
+<div class="section">
+  <h2>0. Apertura — Cómo empezar</h2>
+
+  <h3>Saludo al tribunal <span style="font-weight:400;color:#9aa8b8;">(~15 seg)</span></h3>
+  <div class="script-box">
+    <div class="label">💬 Lo que dices:</div>
+    <p>"Buenas noches. Mi nombre es Alexis Labrador. Muchas gracias por su tiempo y por estar aquí hoy."</p>
+  </div>
+
+  <hr class="section-divider">
+
+  <h3>El problema — el gancho narrativo <span style="font-weight:400;color:#9aa8b8;">(~45 seg)</span></h3>
+  <div class="script-box">
+    <div class="label">💬 Lo que dices:</div>
+    <p>"El proyecto que vamos a presentar hoy corresponde al sector retail. Concretamente, hemos trabajado con DSMarket, una cadena de supermercados que gestiona 10 tiendas en tres ciudades — Boston, Nueva York y Filadelfia — con más de 3.000 productos en catálogo. Cada semana, los responsables de compras tienen que decidir cuántas unidades pedir de cada producto, para cada tienda. Sin información. A ojo.</p>
+    <p style="margin-top:10px;">¿Qué ocurre cuando te equivocas? Si pides de más, tienes stock muerto ocupando espacio y capital inmovilizado. Si pides de menos, tienes una estantería vacía un sábado — y el cliente se va a la competencia.</p>
+    <p style="margin-top:10px;">Por ejemplo, en los datos que analizamos, el último mes cerró con un 16,64% menos de ingresos respecto al anterior — y eso con abril incompleto, solo hasta el día 24. Y el sistema detecta que 2.076 productos — el 68% del catálogo — llevan más de la mitad del año sin registrar una sola venta. Sin un sistema de previsión, nadie lo sabe hasta que alguien lo descubre manualmente."</p>
+  </div>
+
+  <hr class="section-divider">
+
+  <h3>La solución — tu propuesta <span style="font-weight:400;color:#9aa8b8;">(~30 seg)</span></h3>
+  <div class="script-box">
+    <div class="label">💬 Lo que dices:</div>
+    <p>"Lo que hemos construido es un sistema end-to-end: desde la predicción de demanda con machine learning hasta una recomendación automática de pedido por producto y tienda, con un dashboard operativo en Power BI que cualquier gestor puede usar sin necesitar saber de modelos.</p>
+  </div>
+
+  <hr class="section-divider">
+
+  <h3>Estructura de la presentación <span style="font-weight:400;color:#9aa8b8;">(~20 seg)</span></h3>
+  <div class="script-box">
+    <div class="label">💬 Lo que dices:</div>
+    <p>"La presentación la hemos estructurado en cuatro bloques: primero, el análisis del negocio. Segundo, la segmentación de tiendas, productos, precios y calendario. Tercero, el modelo predictivo. Y por último, el sistema de abastecimiento, donde trasladamos esa predicción a una acción concreta de compra."</p>
+  </div>
+
+  <hr class="section-divider">
+
+  <h3>Transición al primer slide <span style="font-weight:400;color:#9aa8b8;">(~10 seg)</span></h3>
+  <div class="script-box">
+    <div class="label">💬 Lo que dices:</div>
+    <p>"Vamos a empezar con la vista ejecutiva."</p>
+  </div>
+</div>
+
+<!-- 1. VISTA GENERAL EJECUTIVO -->
+<div class="section">
+  <h2>1. Vista General — Ejecutivo</h2>
+
+  <h3>Barra superior de KPIs</h3>
+  <div class="kpi-grid cols-3">
+    <div class="kpi-card">
+      <div class="kpi-label">Revenue Total</div>
+      <div class="kpi-value">239,62M</div>
+      <div class="kpi-sub">Ingresos acumulados de toda la red</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Productos</div>
+      <div class="kpi-value">3.049</div>
+      <div class="kpi-sub">SKUs activos en catálogo</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Tiendas</div>
+      <div class="kpi-value">10</div>
+      <div class="kpi-sub">Boston · New York · Philadelphia</div>
+    </div>
+  </div>
+
+  <div class="script-box">
+    <div class="label">💬 Lo que dices:</div>
+    <p>"Tenemos 10 tiendas distribuidas en tres ciudades, con 3.049 productos en catálogo y 239 millones en ingresos acumulados. Tribeca lidera con casi 41 millones, mientras South End tiene el menor volumen con 20 millones."</p>
+  </div>
+
+  <h3>Gráfico evolución de revenue</h3>
+  <div class="script-box">
+    <div class="label">💬 Lo que dices:</div>
+    <p>"Este gráfico muestra cómo han crecido las ventas de cada tienda desde abril 2015 hasta abril 2016. Todas las tiendas muestran crecimiento sostenido. La tendencia positiva es clara en toda la cadena."</p>
+  </div>
+
+  <h3>Alertas automáticas</h3>
+  <div class="script-box">
+    <div class="label">💬 Lo que dices:</div>
+    <p>"El sistema detecta automáticamente dos señales de alerta:</p>
+    <ul style="margin: 10px 0 4px 20px; font-style: italic; font-size: 14px; color: #2c3e50; line-height: 1.65;">
+      <li style="margin-bottom: 6px;">⚠ <strong>Baja Rotación:</strong> productos donde entre el 10% y el 50% de los días de los últimos 12 meses tuvieron cero ventas.</li>
+      <li>🔴 <strong>Alta Inactividad:</strong> productos donde más de la mitad de los días del último año no se registró ni una sola unidad vendida. Esto puede indicar rotura de stock o caída de demanda."</li>
+    </ul>
+  </div>
+
+  <!-- NUEVA SECCIÓN: Definición de alertas -->
+  <h3>¿Qué miden exactamente las alertas? — Para si preguntan</h3>
+
+  <div class="alert-def-grid">
+    <div class="alert-def-card yellow">
+      <div class="ad-emoji">⚠</div>
+      <div class="ad-title">Baja Rotación</div>
+      <div class="ad-def">Productos donde entre el 10% y el 50% de los días de los últimos 12 meses tuvieron <strong>cero ventas</strong>. Señal de rotación insuficiente pero recuperable.</div>
+      <div class="ad-threshold">Ratio: 10% ≤ días sin ventas ≤ 50%</div>
+    </div>
+    <div class="alert-def-card red">
+      <div class="ad-emoji">🔴</div>
+      <div class="ad-title">Alta Inactividad</div>
+      <div class="ad-def">Productos donde <strong>más del 50%</strong> de los días del último año no tuvieron ninguna venta. Más de la mitad del año sin actividad — candidatos a revisión de catálogo.</div>
+      <div class="ad-threshold">Ratio: días sin ventas &gt; 50%</div>
+    </div>
+  </div>
+
+  <div class="def-note">
+    <strong>Cómo se calcula el ratio:</strong> Para cada producto se divide el número de días con ventas = 0 entre el total de días del período (últimos 12 meses). El cálculo es <strong>a nivel global</strong> — combina todas las tiendas. Un producto que vende bien en 8 tiendas pero no en 2 puede tener un ratio combinado que lo saque de la alerta, aunque en esas 2 tiendas sea un problema real.<br><br>
+    <strong>Guión recomendado:</strong> <em>"Identificamos productos que en los últimos 12 meses no tuvieron ventas en más del 10% de los días — señal de baja rotación real, no estacional. Al usar 12 meses completos, eliminamos el ruido de la estacionalidad."</em>
+  </div>
+
+  <div class="note-box">
+    <strong>¿Qué significa el 50% de días sin ventas?</strong> Más de la mitad de los días del año sin registrar ni una sola unidad vendida. No son días consecutivos necesariamente — pueden ser días alternos a lo largo del año. Es un patrón <strong>crónico</strong>, no puntual.
+  </div>
+
+  <h3>Vista ejecutivo — Comparativa últimos 30 días</h3>
+  <div class="script-box">
+    <div class="label">💬 Lo que dices:</div>
+    <p>"A la izquierda, tenemos la actividad diaria de ventas por tienda en el último mes, donde se pueden apreciar picos claros los fines de semana.<br>A la derecha, las métricas clave de abril 2016: donde indican que cerramos con 4 millones en ingresos, un 16,64% por debajo del mes anterior, aunque el precio medio subió un 1,68%, es decir que vendemos productos de mayor valor."</p>
+  </div>
+</div>
+
+<!-- 2. VISTA GENERAL ANALISTA -->
+<div class="section">
+  <h2>2. Parte Analista</h2>
+
+  <h3>Heatmap — Ventas por día y tienda</h3>
+  <div class="script-box">
+    <div class="label">💬 Lo que dices:</div>
+    <p>"Tenemos un mapa de calor que muestra las unidades vendidas por tienda y día de la semana. Donde se observa que Tribeca destaca claramente los sábados y domingos, es decir que es la tienda con más actividad en fin de semana.<br>Esta información es clave para planificar la reposición: hay que asegurarse de que Tribeca tenga stock completo antes del viernes."</p>
+  </div>
+
+  <h3>Mix de categorías por tienda</h3>
+  <div class="script-box">
+    <div class="label">💬 Lo que dices:</div>
+    <p>"Para el Mix de categorías por tienda se muestra que Supermarket domina en todas las tiendas, representando entre el 60 y el 73% de las ventas.<br>Accesorios y Home & Garden tienen un peso menor pero constante en todas las tiendas."</p>
+  </div>
+
+  <h3>Análisis de actividad de productos</h3>
+  <div class="script-box">
+    <div class="label">💬 Lo que dices:</div>
+    <p>"Para el Análisis de actividad de productos vemos que la mayoría de estos tienen alta inactividad, ya que se venden menos del 50% de los días.<br>Solo una pequeña fracción son realmente activos. Tribeca es la excepción ya que tiene más productos activos que el resto de tiendas. Es por ello que hay que revisar el surtido en las tiendas con más inactividad."</p>
+  </div>
+</div>
+
+<!-- 3. VISTA GENERAL OPERACIONAL -->
+<div class="section">
+  <h2>3. Vista General — Operacional</h2>
+
+  <div class="script-box">
+    <div class="label">💬 Lo que dices:</div>
+    <p>"Esta pantalla es la herramienta de trabajo diario del equipo operativo. Tres listas de alerta que se actualizan automáticamente."</p>
+  </div>
+
+  <h3>Top 15 Rotación Rápida</h3>
+  <div class="script-box">
+    <div class="label">💬 Lo que dices:</div>
+    <p>"Los productos que más se venden — principalmente de Supermarket. SUPERMARKET_3_090 vende casi 467 unidades por día. Estos productos no pueden faltar nunca en el almacén. Una rotura aquí impacta directamente en los ingresos."</p>
+  </div>
+
+  <h3>Top 15 Baja Actividad</h3>
+  <div class="script-box">
+    <div class="label">💬 Lo que dices:</div>
+    <p>"Productos que llevan semanas o meses sin venderse. El caso más extremo lleva 366 días sin una venta en Yorktown. El sistema avisa automáticamente pero es el gerente el que toma la decisión final de si hay rotura de stock o simplemente no tiene demanda."</p>
+  </div>
+
+  <h3>Top 15 Caída en ventas</h3>
+  <div class="script-box">
+    <div class="label">💬 Lo que dices:</div>
+    <p>"Productos cuyas ventas han caído drásticamente, donde varios tienen caída del 100%, es decir, han pasado de vender algunas unidades a cero.<br>La intensidad del color rojo indica la gravedad de la caída. Son los candidatos a revisar urgentemente."</p>
+  </div>
+</div>
+
+<!-- 4. MODELO ML - COMPARATIVA -->
+<div class="section">
+  <h2>4. Modelo ML — Comparativa de Modelos</h2>
+
+  <div class="script-box">
+    <div class="label">💬 Lo que dices:</div>
+    <p>"Para predecir la demanda, comparamos 6 algoritmos de inteligencia artificial contra una referencia simple: la media de ventas de los últimos 28 días — lo que haría cualquier analista con Excel."</p>
+  </div>
+
+  <table class="metrics-table">
+    <thead>
+      <tr>
+        <th>Modelo</th>
+        <th>Error medio MAE (uds.)</th>
+        <th>Mejora vs referencia</th>
+        <th>Tiempo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Referencia (media 28 días)</td>
+        <td>1,00 uds.</td>
+        <td>—</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>Ridge Regression</td>
+        <td>0,997 uds.</td>
+        <td>+5,5%</td>
+        <td>4 min</td>
+      </tr>
+      <tr>
+        <td>Random Forest</td>
+        <td>0,973 uds.</td>
+        <td>+8,0%</td>
+        <td>35 min</td>
+      </tr>
+      <tr>
+        <td>CatBoost</td>
+        <td>0,961 uds.</td>
+        <td>+9,6%</td>
+        <td>56 min</td>
+      </tr>
+      <tr>
+        <td>LightGBM</td>
+        <td>0,960 uds.</td>
+        <td>+9,9%</td>
+        <td>65 min</td>
+      </tr>
+      <tr>
+        <td>XGBoost</td>
+        <td>0,959 uds.</td>
+        <td>+9,9%</td>
+        <td>24 min</td>
+      </tr>
+      <tr class="winner">
+        <td>⭐ XGBoost + Optuna</td>
+        <td>0,958 uds.</td>
+        <td>+13,1%</td>
+        <td>31 min</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="script-box">
+    <div class="label">💬 Lo que dices:</div>
+    <p>"El modelo ganador es XGBoost con ajuste fino automático. La métrica técnica principal es el RMSE — mide el error penalizando más los fallos grandes. Nuestro RMSE final es 1,90, frente al 2,18 de la referencia: una mejora del 13,1%. En términos más cotidianos, el MAE nos dice que el modelo se equivoca de media 0,96 unidades por producto y día — menos de 1 unidad. En una cadena de 30.000 combinaciones producto-tienda, ese 13% de mejora se traduce en menos roturas de stock y menos sobrestock."</p>
+  </div>
+
+  <h3>¿Por qué dos métricas? — Para si preguntan</h3>
+  <table class="metrics-table">
+    <thead>
+      <tr>
+        <th>Métrica</th>
+        <th>Qué mide</th>
+        <th>Valor ganador</th>
+        <th>Para quién</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>RMSE</strong></td>
+        <td>Error penalizando más los fallos grandes. Es la métrica técnica principal — un error de 10 unidades pesa mucho más que diez errores de 1.</td>
+        <td><strong>1,90 (vs 2,18 referencia)</strong></td>
+        <td>Técnicos y evaluadores del TFM</td>
+      </tr>
+      <tr>
+        <td><strong>MAE</strong></td>
+        <td>Error medio en unidades — cuánto se equivoca el modelo de media en cada predicción.</td>
+        <td><strong>0,96 uds./día</strong></td>
+        <td>Ejecutivos — más fácil de comunicar</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="tip-box">
+    <strong>Guión recomendado si preguntan por las métricas:</strong> "La métrica técnicamente más importante es el RMSE, que pasó de 2,18 en la referencia a 1,90 con XGBoost — una mejora del 13%. El MAE complementa esa lectura diciéndonos que, en el día a día, el modelo falla menos de 1 unidad por producto. Ambas métricas apuntan en la misma dirección."
+  </div>
+
+  <div class="tip-box">
+    <strong>Tip de presentación:</strong> No entres en detalles técnicos de los algoritmos. El mensaje clave es: "mejora un 13% respecto a lo que se haría manualmente, y lo hace automáticamente cada semana."
+  </div>
+</div>
+
+<!-- 5. MODELO ML - VALIDACIÓN VISUAL -->
+<div class="section">
+  <h2>5. Modelo ML — Validación Visual</h2>
+
+  <div class="script-box">
+    <div class="label">💬 Lo que dices:</div>
+    <p>"Este gráfico es la prueba real del modelo. La línea azul son las ventas reales de marzo y abril 2016 — datos que el modelo nunca había visto durante el entrenamiento. La línea naranja es lo que predijo el modelo. Como se aprecia, siguen prácticamente el mismo patrón: los picos de fin de semana, las caídas entre semana, los volúmenes globales. El modelo ha aprendido la estacionalidad del negocio."</p>
+  </div>
+
+  <div class="tip-box">
+    <strong>Tip de presentación:</strong> Este gráfico es el más impactante visualmente. Señala que ambas líneas se superponen casi perfectamente y di: "Esto es lo que buscamos — que el modelo no solo sea correcto en números, sino que entienda el comportamiento real del negocio."
+  </div>
+</div>
+
+<!-- 6. CLUSTERING -->
+<div class="section">
+  <h2>6. Modelo ML — Clustering (Segmentación)</h2>
+
+  <div class="script-box">
+    <div class="label">💬 Lo que dices:</div>
+    <p>"Más allá de predecir la demanda, el sistema agrupa automáticamente los productos y tiendas por comportamiento de compra. Esto permite aplicar estrategias de reposición distintas según el tipo de producto o tienda."</p>
+  </div>
+
+  <h3>Clustering por producto — 5 grupos</h3>
+  <div class="cluster-grid">
+    <div class="cluster-card green">
+      <div class="c-title">★ Productos Estrella <span style="font-weight:400;font-size:12px;color:#276749">· 74 prod · 2,4%</span></div>
+      <div class="c-body">Los que más venden. Demanda muy estable y predecible. 93% son de Supermarket. Una rotura aquí impacta directamente en ingresos.</div>
+      <span class="c-action">→ Stock permanente garantizado</span>
+    </div>
+    <div class="cluster-card blue">
+      <div class="c-title">Regulares Supermercado <span style="font-weight:400;font-size:12px;color:#2b6cb0">· 1.537 prod · 50,4%</span></div>
+      <div class="c-body">El grueso del catálogo. Rotación media, demanda predecible. El modelo los predice con alta precisión.</div>
+      <span class="c-action">→ Gestión automática por umbral</span>
+    </div>
+    <div class="cluster-card orange">
+      <div class="c-title">Fin de Semana <span style="font-weight:400;font-size:12px;color:#c05621">· 615 prod · 20,2%</span></div>
+      <div class="c-body">Ventas +45% sábado y domingo. Demanda irregular entre semana. 52% Hogar & Jardín.</div>
+      <span class="c-action">→ Reponer el jueves anticipadamente</span>
+    </div>
+    <div class="cluster-card purple">
+      <div class="c-title">Premium / Promocional <span style="font-weight:400;font-size:12px;color:#553c9a">· 295 prod · 9,7%</span></div>
+      <div class="c-body">Precio más alto del catálogo. Cuando hay oferta, la demanda se dispara. Sin promoción, vende poco.</div>
+      <span class="c-action">→ Coordinar con calendario de campañas</span>
+    </div>
+    <div class="cluster-card red wide">
+      <div class="c-title">Demanda Intermitente <span style="font-weight:400;font-size:12px;color:#9b2c2c">· 528 prod · 17,3%</span></div>
+      <div class="c-body">Casi sin ventas diarias. Muy impredecibles. No justifican stock permanente en almacén.</div>
+      <span class="c-action">→ Pedido bajo demanda · Revisar si siguen en catálogo</span>
+    </div>
+  </div>
+
+  <h3>Clustering por tienda — 3 grupos</h3>
+  <div class="cluster-grid">
+    <div class="cluster-card green">
+      <div class="c-title">Alto Volumen — Boston <span style="font-weight:400;font-size:12px;color:#276749">· 5 tiendas · 50%</span></div>
+      <div class="c-body">Las que más venden pero con mayor riesgo de rotura. Demanda muy variable día a día.</div>
+      <span class="c-action">→ Máxima prioridad en reposición automática</span>
+    </div>
+    <div class="cluster-card orange">
+      <div class="c-title">Fin de Semana — New York <span style="font-weight:400;font-size:12px;color:#c05621">· 3 tiendas · 30%</span></div>
+      <div class="c-body">Ventas +44% sábado/domingo. Reponer entre semana genera exceso; no reponer genera roturas de fin de semana.</div>
+      <span class="c-action">→ Ciclo de reposición ajustado al sábado</span>
+    </div>
+    <div class="cluster-card red">
+      <div class="c-title">Baja Actividad — Philadelphia + parte NY <span style="font-weight:400;font-size:12px;color:#9b2c2c">· 2 tiendas · 20%</span></div>
+      <div class="c-body">Ventas más bajas de la cadena. Picos imprevistos por eventos locales.</div>
+      <span class="c-action">→ Revisar surtido y ajustar safety stock al alza</span>
+    </div>
+  </div>
+</div>
+
+<!-- 7. ABASTECIMIENTO - FLUJO -->
+<div class="section">
+  <h2>7. Abastecimiento — Flujo Automático del Sistema</h2>
+
+  <div class="script-box">
+    <div class="label">💬 Lo que dices:</div>
+    <p>"Este diagrama muestra cómo funciona el sistema cada semana de forma completamente automática. Sin intervención humana."</p>
+  </div>
+
+  <ul class="steps">
+    <li>
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <div class="step-title">Lunes 6:00 AM — Activación automática</div>
+        <div class="step-desc">El sistema se activa solo cada lunes por la mañana mediante un programador de tareas, ya sea en Apache Airflow o mediante cron.</div>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <div class="step-title">Recogida de los datos históricos de ventas</div>
+        <div class="step-desc">Extrae el historial de ventas de los últimos 3 meses de todas las tiendas - aproximadamente 5,2 millones de transacciones.</div>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <div class="step-title">Análisis de patrones</div>
+        <div class="step-desc">Identificar los días con más ventas, los efectos que tienen los eventos, las tendencias por producto y tienda.</div>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <div class="step-title">Ejecución del modelo de predicción</div>
+        <div class="step-desc">XGBoost genera 854.120 predicciones — 4 semanas de demanda para cada uno de los 30.490 productos.</div>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <div class="step-title">Cálculo de órdenes de compra</div>
+        <div class="step-desc">Donde para cada producto se calcula la demanda proyectada - stock actual - margen de seguridad. Dando como resultado cuantas unidades hay que pedir exactamente.</div>
+      </div>
+    </li>
+    <div class="tip-box">El margen de seguridad se calcula automáticamente como 3 veces la desviación estándar de las predicciones diarias.</div>
+    <li>
+      <div class="step-num">6</div>
+      <div class="step-content">
+        <div class="step-title">Publicación en Power BI — 13 minutos después</div>
+        <div class="step-desc">Donde cada gerente de cada tienda abre el dashboard y ve qué pedir, cuánto y con qué urgencia.</div>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<!-- 8. ABASTECIMIENTO - ADMINISTRADOR -->
+<div class="section">
+  <h2>8. Abastecimiento — Vista Administrador</h2>
+
+  <div class="script-box">
+    <div class="label">💬 Lo que dices:</div>
+    <p>"Al acceder al sistema, el usuario elige su rol. El administrador ve todas las tiendas y puede filtrar por cualquiera de ellas, por prioridad o por categoría."</p>
+  </div>
+
+  <h3>KPIs principales (vista global)</h3>
+  <div class="kpi-grid cols-5">
+    <div class="kpi-card">
+      <div class="kpi-label">Total Órdenes</div>
+      <div class="kpi-value">386</div>
+      <div class="kpi-sub">Productos que requieren reposición</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-label">Alta Prioridad</div>
+      <div class="kpi-value">338</div>
+      <div class="kpi-sub">Stock crítico · 11,1% del catálogo</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-label">Demanda Semana 1</div>
+      <div class="kpi-value">293.033</div>
+      <div class="kpi-sub">Unidades previstas días 1-7</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-label">Demanda 28 días</div>
+      <div class="kpi-value">1.179.669</div>
+      <div class="kpi-sub">Unidades previstas próximo mes</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Unidades a Ordenar</div>
+      <div class="kpi-value">50.275</div>
+      <div class="kpi-sub">Demanda prevista 7d − stock en almacén</div>
+    </div>
+  </div>
+
+  <h3>Tabla órdenes de reposición</h3>
+  <div class="script-box">
+    <div class="label">💬 Lo que dices:</div>
+    <p>"La tabla muestra cada producto en cada tienda con: stock actual, stock de seguridad, la previsión semana a semana en color — verde para demanda baja (> 0 uds y < 30 uds), amarillo para media (>= 30 uds y < 80 uds), rojo para alta (>= 80 uds) — y la cantidad exacta que hay que pedir calculada automáticamente. La columna Estado indica si es ALTA o NORMAL.<br>Estado = Alta: se calcula con el stock actual < la mitad del punto de reorden (suma de las predicciones de los próximos 7 días + margen de seguridad), indicando que es stock crítico, hay riesgo real de rotura."</p>
+  </div>
+</div>
+
+<!-- 9. ABASTECIMIENTO - GERENTE -->
+<div class="section">
+  <h2>9. Abastecimiento — Vista Gerente de Tienda</h2>
+
+  <div class="script-box">
+    <div class="label">💬 Lo que dices:</div>
+    <p>"El gerente de tienda accede con su propio perfil y ve únicamente los datos de su tienda — en este caso Harlem. No puede ver ni modificar datos de otras tiendas y así sabe exactamente en qué concentrarse esta semana."</p>
+  </div>
+
+  <h3>KPIs de Harlem</h3>
+  <div class="kpi-grid cols-5">
+    <div class="kpi-card">
+      <div class="kpi-label">Total Órdenes</div>
+      <div class="kpi-value">106</div>
+      <div class="kpi-sub">Productos a reponer en Harlem</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-label">Alta Prioridad</div>
+      <div class="kpi-value">23</div>
+      <div class="kpi-sub">0,8% del catálogo · urgente</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-label">Demanda Semana 1</div>
+      <div class="kpi-value">29.588</div>
+      <div class="kpi-sub">Unidades previstas esta semana</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-label">Demanda 28 días</div>
+      <div class="kpi-value">119.490</div>
+      <div class="kpi-sub">Unidades previstas este mes</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Unidades a Ordenar</div>
+      <div class="kpi-value">3.536</div>
+      <div class="kpi-sub">Pedido recomendado esta semana</div>
+    </div>
+  </div>
+</div>
+
+<!-- 10. CIERRE -->
+<div class="section">
+  <h2>10. Cierre Ejecutivo</h2>
+
+  <div class="closing-box">
+    <h3>Lo que hemos construido</h3>
+    <p>Un sistema completo que va desde los datos brutos de ventas hasta una recomendación de compra lista para ejecutar.</p>
+    <p>El modelo se equivoca de media <strong>0,96 unidades</strong> por producto y día, representando un <strong>13% de mejoría</strong> con respecto a cualquier cálculo manual.</p>
+    <p>Cada lunes, y en <strong>13 minutos</strong>, el sistema genera <strong>30.490 recomendaciones de reposición</strong> para toda la cadena.</p>
+    <p>Y con esto cada gerente puede abrir el dashboard y saber exactamente qué pedir, cuánto y con qué urgencia.</p>
+    <div class="final">Sin hojas de Excel. Sin cálculos manuales. Sin depender de la intuición.</div>
+  </div>
+
+  <div class="kpi-grid cols-4">
+    <div class="kpi-card">
+      <div class="kpi-label">Mejora en precisión</div>
+      <div class="kpi-value" style="color:#276749">13,1%</div>
+      <div class="kpi-sub">vs media histórica manual</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">RMSE Final</div>
+      <div class="kpi-value" style="color:#276749">1,90</div>
+      <div class="kpi-sub">vs 2,18 referencia (~13%)</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Predicciones semanales</div>
+      <div class="kpi-value" style="color:#dd6b20">854.120</div>
+      <div class="kpi-sub">generadas automáticamente</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Tiempo total del proceso</div>
+      <div class="kpi-value" style="color:#6b46c1">13 min</div>
+      <div class="kpi-sub">de datos a decisión</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
