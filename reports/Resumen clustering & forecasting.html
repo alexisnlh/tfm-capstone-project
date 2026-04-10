@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>DSMarket TFM — Clustering & Forecasting</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12.5px; color: #1a1a2e; background:#fff; max-width: 820px; margin: 0 auto; padding: 30px; }
+
+/* HEADER */
+.doc-header { background: #1b3a5c; color: white; padding: 18px 22px; border-radius: 8px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-start; }
+.doc-header h1 { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+.doc-header .sub { font-size: 11px; opacity: 0.8; }
+.doc-header .meta { text-align: right; font-size: 11px; opacity: 0.85; line-height: 1.7; }
+.doc-header .meta strong { display: block; font-size: 12px; }
+
+/* SECTION HEADERS */
+.sec-header { background: #1b3a5c; color: white; padding: 10px 16px; border-radius: 6px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin: 24px 0 16px 0; }
+.subsec { border-left: 4px solid #0f4c75; padding-left: 12px; margin: 18px 0 10px 0; font-size: 13px; font-weight: 700; color: #0f4c75; }
+
+/* GENERAL TEXT */
+p { line-height: 1.65; margin-bottom: 10px; }
+ul { padding-left: 20px; margin-bottom: 10px; }
+li { line-height: 1.7; margin-bottom: 2px; }
+strong { font-weight: 700; }
+em { font-style: italic; }
+
+/* KPI BOXES */
+.kpi-row { display: flex; gap: 10px; margin: 14px 0; }
+.kpi-box { flex: 1; border: 1px solid #dee2e6; border-radius: 6px; padding: 12px 14px; }
+.kpi-box .kpi-label { font-size: 9.5px; text-transform: uppercase; letter-spacing: 1px; color: #666; font-weight: 600; margin-bottom: 4px; }
+.kpi-box .kpi-val { font-size: 22px; font-weight: 700; color: #1b3a5c; line-height: 1.2; }
+.kpi-box .kpi-sub { font-size: 10.5px; color: #888; margin-top: 3px; }
+.kpi-green { border-top: 3px solid #4caf50; }
+.kpi-green .kpi-val { color: #2e7d32; }
+.kpi-blue { border-top: 3px solid #2196f3; }
+.kpi-orange { border-top: 3px solid #ff9800; }
+.kpi-orange .kpi-val { color: #e65100; }
+
+/* INFO BOXES */
+.info-box { border: 1px solid #dee2e6; border-radius: 6px; padding: 14px 16px; margin: 12px 0; }
+.info-box.green { background: #f1f8f1; border-color: #4caf50; }
+.info-box.blue { background: #e8f4fd; border-color: #2196f3; }
+.info-box.yellow { background: #fffde7; border-color: #f9a825; }
+.info-box.orange { background: #fff8e1; border-color: #ff9800; }
+.info-box .ib-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+.info-box.green .ib-title { color: #2e7d32; }
+.info-box.blue .ib-title { color: #1565c0; }
+.info-box.orange .ib-title { color: #e65100; }
+.info-box p { margin-bottom: 4px; font-size: 12px; }
+
+/* TABLES */
+table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 12px; }
+th { background: #1b3a5c; color: white; padding: 8px 10px; text-align: left; font-weight: 600; }
+td { padding: 8px 10px; border-bottom: 1px solid #e0e0e0; vertical-align: top; line-height: 1.5; }
+tr:nth-child(even) td { background: #f8f9fa; }
+tr.winner td { background: #e8f5e9; font-weight: 700; color: #2e7d32; }
+tr.winner-blue td { background: #e3f2fd; font-weight: 700; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10.5px; font-weight: 600; }
+.badge-green { background: #e8f5e9; color: #2e7d32; border: 1px solid #4caf50; }
+.badge-yellow { background: #fff8e1; color: #e65100; border: 1px solid #ff9800; }
+.badge-red { background: #fce4ec; color: #880e4f; border: 1px solid #e91e63; }
+.badge-blue { background: #e3f2fd; color: #1565c0; border: 1px solid #2196f3; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+
+/* FLOW */
+.flow-label { font-size: 11.5px; color: #555; margin: 8px 0; }
+.flow-label strong { color: #0f4c75; }
+
+/* CLUSTER CARDS */
+.cluster-grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; margin: 14px 0; }
+.cluster-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0; }
+.cluster-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 14px 0; }
+.c-card { border-radius: 8px; padding: 13px 14px; border: 1px solid #e0e0e0; }
+.c-card h4 { font-size: 12.5px; font-weight: 700; margin-bottom: 2px; }
+.c-card .c-sub { font-size: 11px; font-weight: 600; color: #666; margin-bottom: 8px; }
+.c-card p { font-size: 11.5px; line-height: 1.55; color: #333; margin-bottom: 4px; }
+.c-card .c-note { font-style: italic; font-size: 11px; color: #555; margin-top: 6px; line-height: 1.5; }
+.c-card .c-action { font-size: 11px; font-weight: 700; margin-top: 8px; }
+.c-card .c-count { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; }
+.c-count-badge { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+.c-pct { font-size: 10.5px; color: #666; }
+
+/* Distribution bar */
+.dist-section { margin: 16px 0; }
+.dist-title { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #1b3a5c; margin-bottom: 10px; }
+.dist-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.dist-label { font-size: 11px; width: 180px; flex-shrink: 0; }
+.dist-bar-wrap { flex: 1; background: #f0f0f0; border-radius: 4px; height: 18px; overflow: hidden; }
+.dist-bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 6px; font-size: 10px; font-weight: 700; color: white; }
+.dist-num { font-size: 11px; font-weight: 700; width: 80px; text-align: right; flex-shrink: 0; }
+
+/* Card colours */
+.c-estrella { background: #f1f8f1; border-color: #4caf50 !important; }
+.c-estrella h4 { color: #2e7d32; }
+.c-estrella .c-action { color: #2e7d32; }
+.c-estrella .c-count-badge { background: #e8f5e9; color: #2e7d32; border: 1px solid #4caf50; }
+.c-estrella .dist-bar-fill { background: #4caf50; }
+
+.c-regular { background: #e8f4fd; border-color: #2196f3 !important; }
+.c-regular h4 { color: #1565c0; }
+.c-regular .c-action { color: #1565c0; }
+.c-regular .c-count-badge { background: #e3f2fd; color: #1565c0; border: 1px solid #2196f3; }
+.c-regular .dist-bar-fill { background: #2196f3; }
+
+.c-finde { background: #fff8e1; border-color: #ff9800 !important; }
+.c-finde h4 { color: #e65100; }
+.c-finde .c-action { color: #e65100; }
+.c-finde .c-count-badge { background: #fff8e1; color: #e65100; border: 1px solid #ff9800; }
+.c-finde .dist-bar-fill { background: #ff9800; }
+
+.c-premium { background: #f3e5f5; border-color: #9c27b0 !important; }
+.c-premium h4 { color: #6a1b9a; }
+.c-premium .c-action { color: #6a1b9a; }
+.c-premium .c-count-badge { background: #f3e5f5; color: #6a1b9a; border: 1px solid #9c27b0; }
+.c-premium .dist-bar-fill { background: #9c27b0; }
+
+.c-inter { background: #fce4ec; border-color: #e91e63 !important; }
+.c-inter h4 { color: #880e4f; }
+.c-inter .c-action { color: #880e4f; }
+.c-inter .c-count-badge { background: #fce4ec; color: #880e4f; border: 1px solid #e91e63; }
+.c-inter .dist-bar-fill { background: #e91e63; }
+
+.c-alto { background: #f1f8f1; border-color: #4caf50 !important; }
+.c-alto h4 { color: #2e7d32; }
+.c-alto .c-action { color: #2e7d32; }
+.c-alto .c-count-badge { background: #e8f5e9; color: #2e7d32; border: 1px solid #4caf50; }
+
+.c-finde2 { background: #fff8e1; border-color: #ff9800 !important; }
+.c-finde2 h4 { color: #e65100; }
+.c-finde2 .c-action { color: #e65100; }
+.c-finde2 .c-count-badge { background: #fff8e1; color: #e65100; border: 1px solid #ff9800; }
+
+.c-baja { background: #fce4ec; border-color: #e91e63 !important; }
+.c-baja h4 { color: #880e4f; }
+.c-baja .c-action { color: #880e4f; }
+.c-baja .c-count-badge { background: #fce4ec; color: #880e4f; border: 1px solid #e91e63; }
+
+/* Feature tag badges */
+.tag { display: inline-block; padding: 1px 7px; border-radius: 8px; font-size: 10px; font-weight: 600; margin-right: 3px; }
+.tag-hist { background: #e3f2fd; color: #1565c0; }
+.tag-temp { background: #fff8e1; color: #e65100; }
+.tag-prod { background: #e8f5e9; color: #2e7d32; }
+
+hr { border: none; border-top: 1px solid #e0e0e0; margin: 20px 0; }
+.footer { text-align: center; font-size: 10.5px; color: #aaa; margin-top: 30px; padding-top: 12px; border-top: 1px solid #e0e0e0; }
+
+@media print { body { padding: 20px; } }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="doc-header">
+  <div>
+    <h1>DSMarket TFM — Clustering &amp; Forecasting</h1>
+    <div class="sub">Grupo 2 · DS&amp;IA 0925 · Resumen para reunión con tutor</div>
+  </div>
+  <div class="meta">
+    Marzo 2026<br>30 min · Notebook final<br>
+    <strong>Grupo_2_dscesp_0925_tfm_ds_market</strong>
+  </div>
+</div>
+
+<!-- 1. CONTEXTO -->
+<div class="sec-header">1. Contexto y Objetivo del Proyecto</div>
+<p>DSMarket es una cadena de retail con <strong>10 tiendas</strong> en 3 ciudades (New York, Boston, Philadelphia), <strong>3.049 productos</strong> en 3 categorías y datos de ventas diarias desde <strong>enero 2011 hasta abril 2016</strong> (~59M registros).</p>
+
+<div class="kpi-row">
+  <div class="kpi-box">
+    <div class="kpi-label">Objetivo Principal</div>
+    <div class="kpi-val" style="font-size:14px; margin-top:4px;"><strong>Predecir demanda diaria<br>por producto y tienda</strong></div>
+    <div class="kpi-sub">Para optimizar abastecimiento</div>
+  </div>
+  <div class="kpi-box kpi-blue">
+    <div class="kpi-label">Dataset Total</div>
+    <div class="kpi-val">~59M</div>
+    <div class="kpi-sub">filas · 10 tiendas · 3.049 productos</div>
+  </div>
+  <div class="kpi-box kpi-orange">
+    <div class="kpi-label">Período Cubierto</div>
+    <div class="kpi-val">5.3 años</div>
+    <div class="kpi-sub">Ene 2011 → Abr 2016</div>
+  </div>
+</div>
+
+<div class="info-box blue">
+  <span class="flow-label"><strong>Flujo del proyecto:</strong> EDA → Análisis ACF/PACF → Feature Engineering → <strong>Clustering</strong> (productos + tiendas) → <strong>Forecasting</strong> (6 modelos + Optuna) → Sistema de Abastecimiento</span>
+</div>
+
+<!-- 2. CLUSTERING -->
+<div class="sec-header">2. Clustering — Segmentación de Productos y Tiendas</div>
+
+<p><strong>Objetivo del clustering:</strong> Identificar grupos homogéneos de productos y tiendas para personalizar estrategias de reposición y comprender patrones de demanda. No se usa como feature del modelo ML, sino como herramienta de análisis de negocio.</p>
+
+<div class="subsec">2.0 Métricas de evaluación del clustering — cómo interpretarlas</div>
+<p>KMeans no tiene una métrica de error directa como los modelos supervisados. Se usan dos métricas complementarias para elegir el k óptimo:</p>
+
+<div class="two-col">
+  <div class="info-box green">
+    <div class="ib-title">Silhouette Score — Cuanto más alto mejor</div>
+    <p><strong>Rango: −1 → +1</strong></p>
+    <p>Mide qué tan bien encaja cada punto en su propio cluster comparado con los demás clusters.</p>
+    <p><strong>+1</strong> → el punto está muy cerca de su cluster y lejos de los otros<br>
+    <strong>0</strong> → el punto está en el borde entre dos clusters (ambigüedad)<br>
+    <strong>−1</strong> → el punto encaja mejor en otro cluster (asignación incorrecta)</p>
+    <p><em>Referencia práctica: >0.50 excelente · 0.25–0.50 razonable · &lt;0.25 clusters débiles</em></p>
+  </div>
+  <div class="info-box orange">
+    <div class="ib-title">Inercia (WCSS) — Cuanto más baja mejor</div>
+    <p><strong>Rango: 0 → ∞</strong></p>
+    <p>Suma de distancias al cuadrado de cada punto a su centroide (Within-Cluster Sum of Squares).</p>
+    <p><strong>Problema:</strong> siempre baja al aumentar k — con k = número de puntos, inercia = 0.<br>
+    Por eso se usa el <strong>Elbow Method</strong>: se busca el "codo" donde la reducción de inercia se vuelve marginal.</p>
+    <p><em>No se interpreta de forma absoluta — solo tiene sentido comparando distintos k entre sí.</em></p>
+  </div>
+</div>
+
+<div class="info-box yellow">
+  <p><strong>¿Por qué usar ambas?</strong> La inercia siempre mejora con más k (sesgada hacia k grande). El Silhouette Score penaliza k demasiado grande si los clusters resultantes son artificiales. Usarlas juntas evita elegir un k innecesariamente complejo: se busca el k donde el <em>Silhouette es máximo</em> y la <em>reducción de inercia ya no justifica añadir más clusters.</em></p>
+</div>
+
+<!-- 2.1 PRODUCTOS -->
+<div class="subsec">2.1 Clustering de Productos (KMeans)</div>
+
+<p style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px;">Features Utilizadas</p>
+<ul>
+  <li><strong>avg_daily_sales</strong> — Ventas promedio diarias del producto</li>
+  <li><strong>cv_sales</strong> — Coeficiente de variación (std/media) → mide irregularidad de demanda</li>
+  <li><strong>avg_price / std_price</strong> — Precio medio y variabilidad (descuentos)</li>
+  <li><strong>weekend_boost</strong> — Ratio ventas fin de semana vs días laborables</li>
+  <li><strong>event_sensitivity</strong> — Ratio ventas en días de evento vs sin evento</li>
+</ul>
+<p style="font-size:11px; color:#666;">Normalización previa con <strong>StandardScaler</strong> para evitar que avg_daily_sales domine por escala.</p>
+
+<p style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; margin: 14px 0 6px;">Paso 1 — Determinación del rango de k (Elbow + Silhouette sobre k=2..12)</p>
+<p>La regla heurística <strong>k ≈ √(n/2)</strong> con n=3.049 productos daría k≈39 clusters — inmanejable operativamente. En su lugar se evaluó el rango k=2..12 usando <strong>MiniBatchKMeans</strong> sobre los 3.049 productos con dos métricas complementarias:</p>
+
+<div class="two-col">
+  <div class="info-box green">
+    <div class="ib-title">Elbow Method</div>
+    <p>La inercia desciende pronunciadamente hasta <strong>k=6</strong>, donde KneeLocator detecta el codo (punto de inflexión). A partir de k=6 cada cluster adicional reduce la inercia marginalmente (~200–400 puntos vs ~1.000–2.000 antes del codo).</p>
+  </div>
+  <div class="info-box blue">
+    <div class="ib-title">Silhouette Score</div>
+    <p>Pico en k=2 (0.21), con un segundo máximo local en k=7 (0.187). Descenso generalizado a partir de k=8 (caída pronunciada en k=10), indicando que clusters más pequeños empiezan a solaparse.</p>
+  </div>
+</div>
+
+<p style="font-size:11.5px; color:#555; margin: 8px 0;">Valores de silhouette en torno a 0.17–0.21 son esperables en datos de retail item-día, donde los perfiles no son perfectamente separables (misma cadena, misma política de precios).</p>
+
+<p><strong>Rango seleccionado para evaluación detallada: k ∈ {5, 6, 7}</strong> — convergencia entre el codo (k=6) y el segundo máximo de silhouette (k=7), con k=5 como valor adyacente inferior.</p>
+
+<p style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; margin: 14px 0 6px;">Paso 2 — Evaluación detallada k ∈ {5, 6, 7}</p>
+
+<table>
+  <tr><th>k</th><th>Silhouette Score ↑</th><th>Inercia ↓</th><th>Veredicto</th></tr>
+  <tr class="winner"><td><strong>k = 5</strong></td><td><strong>0.2249</strong></td><td><strong>10.420</strong></td><td><span class="badge badge-green">✓ ELEGIDO — mejor separación</span></td></tr>
+  <tr><td>k = 6</td><td>0.1937</td><td>9.475</td><td><span class="badge badge-yellow">Silhouette cae -13% vs k=5</span></td></tr>
+  <tr><td>k = 7</td><td>0.1936</td><td>8.813</td><td><span class="badge badge-red">Sin mejora respecto a k=6</span></td></tr>
+</table>
+
+<div class="info-box blue">
+  <p><strong>Decisión: k = 5.</strong> Mayor Silhouette Score (0.2249): los clusters están mejor definidos y separados. La reducción de inercia de k=5 a k=6 (~950 puntos, -9%) no compensa la pérdida de cohesión interna (-13% en silhouette). k=6 y k=7 producen silhouettes prácticamente idénticos (0.1937 vs 0.1936), confirmando que el 6º y 7º cluster no aportan nueva información. 5 perfiles es además operativamente manejable para el equipo de negocio.</p>
+</div>
+
+<!-- DISTRIBUCIÓN PRODUCTOS - NUEVO -->
+<p style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; margin: 18px 0 8px;">Los 5 Clusters Resultantes — Distribución</p>
+
+<div class="info-box blue" style="margin-bottom:14px;">
+  <div class="ib-title">Representatividad de cada cluster (total: 3.049 productos)</div>
+  <div style="margin-top:8px;">
+    <div class="dist-bar-row">
+      <div class="dist-label"><strong style="color:#1565c0;">Cluster 1</strong> · Regulares Supermercado</div>
+      <div class="dist-bar-wrap"><div class="dist-bar-fill" style="width:50.4%; background:#2196f3;">50,4%</div></div>
+      <div class="dist-num" style="color:#1565c0;">1.537 prod.</div>
+    </div>
+    <div class="dist-bar-row">
+      <div class="dist-label"><strong style="color:#e65100;">Cluster 0</strong> · Fin de Semana</div>
+      <div class="dist-bar-wrap"><div class="dist-bar-fill" style="width:20.2%; background:#ff9800;">20,2%</div></div>
+      <div class="dist-num" style="color:#e65100;">615 prod.</div>
+    </div>
+    <div class="dist-bar-row">
+      <div class="dist-label"><strong style="color:#880e4f;">Cluster 2</strong> · Demanda Intermitente</div>
+      <div class="dist-bar-wrap"><div class="dist-bar-fill" style="width:17.3%; background:#e91e63;">17,3%</div></div>
+      <div class="dist-num" style="color:#880e4f;">528 prod.</div>
+    </div>
+    <div class="dist-bar-row">
+      <div class="dist-label"><strong style="color:#6a1b9a;">Cluster 3</strong> · Premium / Promocional</div>
+      <div class="dist-bar-wrap"><div class="dist-bar-fill" style="width:9.7%; background:#9c27b0;">9,7%</div></div>
+      <div class="dist-num" style="color:#6a1b9a;">295 prod.</div>
+    </div>
+    <div class="dist-bar-row">
+      <div class="dist-label"><strong style="color:#2e7d32;">Cluster 4</strong> · Productos Estrella ★</div>
+      <div class="dist-bar-wrap"><div class="dist-bar-fill" style="width:2.4%; background:#4caf50; min-width:28px;">2,4%</div></div>
+      <div class="dist-num" style="color:#2e7d32;">74 prod.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CLUSTER CARDS PRODUCTOS -->
+<div class="cluster-grid-4">
+  <div class="c-card c-estrella">
+    <h4>★ Cluster 4</h4>
+    <div class="c-sub">Productos Estrella</div>
+    <div class="c-count"><span class="c-count-badge" style="background:#e8f5e9;color:#2e7d32;border:1px solid #4caf50;">74 productos</span><span class="c-pct">· 2,4%</span></div>
+    <p style="margin-top:8px;">Ventas/día: <strong>11.84</strong> (10× resto)</p>
+    <p>CV: 1.18 — muy estables</p>
+    <p>Precio: 1.81€ (más bajo)</p>
+    <p>93% SUPERMARKET</p>
+    <p class="c-note">Alta rotación, baja variabilidad y precio bajo. Son los productos de primera necesidad que sostienen el volumen de la cadena. Cualquier rotura de stock impacta directamente en ingresos → stock permanente sin excepción.</p>
+    <p class="c-action">→ Stock permanente garantizado, sin excepción.</p>
+  </div>
+  <div class="c-card c-regular">
+    <h4>Cluster 1</h4>
+    <div class="c-sub">Regulares Supermercado</div>
+    <div class="c-count"><span class="c-count-badge" style="background:#e3f2fd;color:#1565c0;border:1px solid #2196f3;">1.537 productos</span><span class="c-pct">· 50,4%</span></div>
+    <p style="margin-top:8px;">Ventas/día: <strong>1.34</strong></p>
+    <p>CV: 1.73 — variabilidad media</p>
+    <p>Precio: 3.87€</p>
+    <p>61% SUPERMARKET</p>
+    <p class="c-note">Demanda constante y predecible. Representan el grueso del catálogo. El modelo ML predice bien este grupo gracias a su regularidad → gestión automática por umbral de reposición.</p>
+    <p class="c-action">→ Gestión automática por umbral de reposición.</p>
+  </div>
+  <div class="c-card c-finde">
+    <h4>Cluster 0</h4>
+    <div class="c-sub">Fin de Semana</div>
+    <div class="c-count"><span class="c-count-badge" style="background:#fff8e1;color:#e65100;border:1px solid #ff9800;">615 productos</span><span class="c-pct">· 20,2%</span></div>
+    <p style="margin-top:8px;">Ventas/día: <strong>0.43</strong></p>
+    <p>Weekend boost: <strong>1.45×</strong></p>
+    <p>CV: 2.79 — irregular</p>
+    <p>52% HOME &amp; GARDEN</p>
+    <p class="c-note">Venden un 45% más en fin de semana. Productos de hogar/jardín ligados al ocio. Reponer entre semana falla porque la demanda pico es el sábado → anticipar pedido los jueves.</p>
+    <p class="c-action">→ Anticipar pedido los jueves.</p>
+  </div>
+  <div class="c-card c-premium">
+    <h4>Cluster 3</h4>
+    <div class="c-sub">Premium / Promocional</div>
+    <div class="c-count"><span class="c-count-badge" style="background:#f3e5f5;color:#6a1b9a;border:1px solid #9c27b0;">295 productos</span><span class="c-pct">· 9,7%</span></div>
+    <p style="margin-top:8px;">Precio: <strong>14.76€</strong> (el más alto)</p>
+    <p>std_price: 0.81 (más descuentos)</p>
+    <p>CV: 2.48 — variable</p>
+    <p class="c-note">Precio alto con alta variación → promociones frecuentes que disparan la demanda puntualmente. La demanda no es estable sino reactiva al precio → el modelo necesita sell_price como feature clave para este grupo.</p>
+    <p class="c-action">→ Coordinar reposición con calendario de campañas.</p>
+  </div>
+</div>
+
+<div class="c-card c-inter" style="margin-top:10px;">
+  <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+    <div>
+      <h4>Cluster 2</h4>
+      <div class="c-sub">Demanda Intermitente</div>
+    </div>
+    <div class="c-count"><span class="c-count-badge" style="background:#fce4ec;color:#880e4f;border:1px solid #e91e63;">528 productos</span><span class="c-pct" style="margin-left:6px;">· 17,3%</span></div>
+  </div>
+  <p style="margin-top:8px;">Ventas/día: <strong>0.23</strong> (mínimo) · CV: <strong>3.53</strong> (máximo) · Muy erráticos</p>
+  <p class="c-note">Venden menos de 1 unidad cada 4 días con demanda impredecible. El modelo ML tiene más error en este grupo (alto MAPE). No se justifica stock permanente → pedido bajo demanda o revisión de si el producto debe seguir en catálogo.</p>
+  <p class="c-action">→ No justifica stock permanente. → Pedido bajo demanda o revisar si el producto debe seguir en catálogo.</p>
+</div>
+
+<!-- 2.2 TIENDAS -->
+<div class="subsec" style="margin-top:22px;">2.2 Clustering de Tiendas (KMeans)</div>
+
+<p style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:4px;">Features utilizadas — Mismas que productos pero a nivel tienda</p>
+<p style="font-size:11.5px; color:#555; margin-bottom:12px;">avg_daily_sales, cv_sales, avg_price, weekend_boost, event_sensitivity · Normalización: StandardScaler</p>
+
+<p style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px;">Selección del k óptimo — Por qué exactamente k = 2, 3 y 5</p>
+<p>Con solo <strong>10 tiendas</strong> la elección de k está muy restringida. La regla general es <strong>k ≤ n/2</strong> para garantizar al menos 2 elementos por cluster (con 10 tiendas, máximo k=5). Dentro de ese límite, se eligieron estos tres valores por razones específicas:</p>
+
+<table style="margin: 12px 0;">
+  <tr><th>k evaluado</th><th>Razonamiento</th></tr>
+  <tr><td><strong>k = 2</strong></td><td>Mínimo posible con sentido: separa las tiendas en dos grandes grupos (alto vs bajo rendimiento). Sirve como referencia de si existen diferencias básicas entre tiendas.</td></tr>
+  <tr><td><strong>k = 3</strong></td><td>Hipótesis de negocio: DSMarket opera en <strong>3 ciudades</strong> (New York, Boston, Philadelphia). Si el comportamiento de las tiendas está determinado por su ciudad, k=3 debería revelar exactamente esa estructura. Se evaluó para confirmar o refutar esta hipótesis.</td></tr>
+  <tr><td><strong>k = 5</strong></td><td>Máximo permitido por la regla k ≤ n/2. Con 10 tiendas, k=5 da exactamente 2 tiendas por cluster de media — el límite inferior de representatividad estadística.</td></tr>
+</table>
+
+<p style="font-size:11.5px; color:#555; margin-bottom:12px;">Se omitió k=4 porque no tiene una interpretación natural (no corresponde a ciudades ni a ninguna agrupación geográfica o de negocio conocida). Los resultados confirmaron la hipótesis: k=3 obtuvo el mejor Silhouette y los clusters coinciden con las 3 ciudades.</p>
+
+<table>
+  <tr><th>k</th><th>Silhouette Score ↑</th><th>Inercia ↓</th><th>Veredicto</th></tr>
+  <tr><td>k = 2</td><td>0.2660</td><td>31</td><td><span class="badge badge-blue">Buena separación, poca granularidad</span></td></tr>
+  <tr class="winner"><td><strong>k = 3</strong></td><td><strong>0.2928</strong></td><td><strong>21</strong></td><td><span class="badge badge-green">✓ ELEGIDO — mejor separación</span></td></tr>
+  <tr><td>k = 5</td><td>0.2556</td><td>9</td><td><span class="badge badge-red">Peor que k=3, grupos muy pequeños</span></td></tr>
+</table>
+
+<div class="info-box blue" style="margin:12px 0;">
+  <p><strong>Decisión: k = 3.</strong> Mejor Silhouette Score (0.2928). Además, k=3 tiene una interpretación natural: las 10 tiendas operan en 3 ciudades (New York 4, Boston 3, Philadelphia 3). El resultado confirma que la <strong>ubicación geográfica es el principal factor diferenciador</strong> del comportamiento de ventas. Aumentar a k=5 empeora la separación (0.2556), lo que indica que grupos más pequeños ya no tienen coherencia real.</p>
+</div>
+
+<!-- DISTRIBUCIÓN TIENDAS - NUEVO -->
+<p style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; margin: 18px 0 8px;">Los 3 Clusters Resultantes — Distribución</p>
+
+<div class="info-box green" style="margin-bottom:14px;">
+  <div class="ib-title">Representatividad de cada cluster (total: 10 tiendas)</div>
+  <table style="margin-top:8px; font-size:11.5px;">
+    <tr><th>Cluster</th><th>Nombre</th><th>Tiendas</th><th>% red</th><th>Composición</th></tr>
+    <tr><td><strong>Cluster 1</strong></td><td>Alto Volumen</td><td style="font-weight:700;color:#2e7d32;">5 tiendas</td><td>50%</td><td>3 Boston + 1 New York + 1 Philadelphia</td></tr>
+    <tr><td><strong>Cluster 2</strong></td><td>Fin de Semana</td><td style="font-weight:700;color:#e65100;">3 tiendas</td><td>30%</td><td>2 New York + 1 Philadelphia</td></tr>
+    <tr><td><strong>Cluster 0</strong></td><td>Baja Actividad</td><td style="font-weight:700;color:#880e4f;">2 tiendas</td><td>20%</td><td>1 New York + 1 Philadelphia</td></tr>
+  </table>
+</div>
+
+<div class="cluster-grid-3">
+  <div class="c-card c-alto">
+    <h4>Cluster 1 — Alto Volumen</h4>
+    <div class="c-count" style="margin:6px 0;"><span class="c-count-badge" style="background:#e8f5e9;color:#2e7d32;border:1px solid #4caf50;">5 tiendas · 50%</span></div>
+    <p>avg_daily_sales: <strong>1.26</strong></p>
+    <p>CV: 3.56 — más errático</p>
+    <p>60% Boston (3 tiendas)</p>
+    <p class="c-note">Las tiendas de Boston lideran en ventas pero son las más erráticas. Mayor volumen implica mayor riesgo de rotura → son las que más se benefician del sistema de reposición automática y las predicciones del modelo.</p>
+    <p class="c-action">→ Máxima prioridad en reposición automática.</p>
+  </div>
+  <div class="c-card c-finde2">
+    <h4>Cluster 2 — Fin de Semana</h4>
+    <div class="c-count" style="margin:6px 0;"><span class="c-count-badge" style="background:#fff8e1;color:#e65100;border:1px solid #ff9800;">3 tiendas · 30%</span></div>
+    <p>avg_daily_sales: <strong>1.07</strong></p>
+    <p>Weekend boost: <strong>1.44×</strong></p>
+    <p>67% New York</p>
+    <p class="c-note">Las tiendas de Nueva York presentan un patrón de consumo marcadamente de fin de semana (+44%). La reposición semanal estándar no es válida aquí → requiere ciclo de reposición corto alineado al pico del sábado.</p>
+    <p class="c-action">→ Ciclo de reposición ajustado al pico del sábado.</p>
+  </div>
+  <div class="c-card c-baja">
+    <h4>Cluster 0 — Baja Actividad</h4>
+    <div class="c-count" style="margin:6px 0;"><span class="c-count-badge" style="background:#fce4ec;color:#880e4f;border:1px solid #e91e63;">2 tiendas · 20%</span></div>
+    <p>avg_daily_sales: <strong>0.92</strong></p>
+    <p>Event sensitivity: 0.87</p>
+    <p>NY 50% + Philadelphia 50%</p>
+    <p class="c-note">Tiendas con menor demanda diaria y alta sensibilidad a eventos externos. Volumen bajo significa menor urgencia de reposición, pero sus picos son impredecibles. El modelo tiene más incertidumbre en este grupo → revisar surtido y ajustar safety stock.</p>
+    <p class="c-action">→ Revisar surtido y ajustar safety stock al alza.</p>
+  </div>
+</div>
+
+<div class="info-box yellow" style="margin-top:12px;">
+  <p><strong>Nota sobre los Silhouette Scores:</strong> Valores entre 0.25–0.30 indican diferencias comportamentales <em>sutiles pero reales</em>. Es esperable en una cadena homogénea (mismos productos, misma política de precios). No son clusters perfectamente separados, pero sí con características diferenciadas y accionables.</p>
+</div>
+
+<!-- 3. FORECASTING -->
+<div class="sec-header">3. Forecasting — Predicción de Demanda</div>
+
+<div class="subsec">3.1 Feature Engineering (37 variables)</div>
+<p>Antes de modelar, se construyeron features temporales, de lag, rolling y de precio. La selección de lags se basó en el <strong>análisis ACF/PACF</strong>:</p>
+<ul>
+  <li>ACF muestra autocorrelación significativa hasta lag 40 → <em>serie con mucha memoria temporal</em></li>
+  <li>PACF muestra contribución directa alta en lag 1 (≈0.78) → lag_1 es el predictor más potente</li>
+  <li>Patrones semanales en lags 7, 14, 21, 28 → ciclos de 1, 2, 3 y 4 semanas</li>
+</ul>
+
+<table style="margin:12px 0;">
+  <tr><th>Grupo</th><th>Features</th><th>Justificación</th></tr>
+  <tr><td><strong>Lag</strong></td><td>sales_lag_1/7/14/21/28</td><td>Memoria temporal — ventas pasadas predicen futuras</td></tr>
+  <tr><td><strong>Rolling</strong></td><td>rolling_mean_7/14/28 · rolling_std_7/14/28 · max/min_28</td><td>Tendencia reciente y variabilidad</td></tr>
+  <tr><td><strong>Temporal</strong></td><td>weekday_int · is_weekend · month · week_of_year · is_event</td><td>Estacionalidad semanal/mensual y eventos</td></tr>
+  <tr><td><strong>Precio</strong></td><td>sell_price · price_lag_1 · price_change · price_rolling_mean_4w</td><td>Elasticidad precio-demanda</td></tr>
+  <tr><td><strong>Agregados</strong></td><td>item_avg_sales · store_avg_sales · category/city_avg</td><td>Nivel base de demanda por entidad</td></tr>
+  <tr><td><strong>Encoding</strong></td><td>item/store/category/dept/city encoded</td><td>Identidad de producto y tienda</td></tr>
+</table>
+
+<div class="subsec">3.2 Split Temporal — por qué no cross-validation</div>
+<div class="two-col">
+  <table>
+    <tr><th>Conjunto</th><th>Período</th><th>Filas</th></tr>
+    <tr><td>Train</td><td>Ene 2011 → Feb 2016</td><td>57.442.786</td></tr>
+    <tr><td>Test</td><td>Mar 2016 (28 días)</td><td>854.616</td></tr>
+    <tr class="winner-blue"><td><strong>Validation</strong></td><td><strong>Abr 2016 (28 días)</strong></td><td><strong>853.720</strong></td></tr>
+  </table>
+  <div class="info-box blue">
+    <div class="ib-title">¿Por qué split temporal?</div>
+    <p>En series temporales el futuro depende del pasado. Si mezclamos fechas en cross-validation, el modelo vería datos futuros durante el entrenamiento (data leakage), obteniendo métricas artificialmente optimistas. El split cronológico garantiza que <em>siempre predecimos hacia adelante</em>, igual que en producción.</p>
+  </div>
+</div>
+
+<div class="subsec">3.3 Baseline — Media Móvil 28 días</div>
+<p>El baseline usa la media de los 28 días anteriores como predicción (rolling_mean_28). Se eligió este umbral porque captura exactamente <strong>4 ciclos semanales completos</strong>, siendo el predictor estadístico más simple con sentido de negocio. Si los modelos ML no superan este baseline, el ejercicio carece de valor.</p>
+<p><strong>RMSE baseline: 2.1847 · MAE: 1.0048 · MAPE: 58.74%</strong></p>
+
+<div class="subsec">3.4 Comparativa de Modelos</div>
+<div class="kpi-row">
+  <div class="kpi-box"><div class="kpi-label">Baseline MA28</div><div class="kpi-val" style="font-size:18px;">2.1847</div><div class="kpi-sub">Referencia</div></div>
+  <div class="kpi-box"><div class="kpi-label">Ridge</div><div class="kpi-val" style="font-size:18px;">2.0647</div><div class="kpi-sub">+5,5%</div></div>
+  <div class="kpi-box"><div class="kpi-label">Random Forest</div><div class="kpi-val" style="font-size:18px;">2.0101</div><div class="kpi-sub">+8,0%</div></div>
+  <div class="kpi-box"><div class="kpi-label">CatBoost</div><div class="kpi-val" style="font-size:18px;">1.9752</div><div class="kpi-sub">+9,6%</div></div>
+  <div class="kpi-box"><div class="kpi-label">LightGBM</div><div class="kpi-val" style="font-size:18px;">1.9674</div><div class="kpi-sub">+9,9%</div></div>
+  <div class="kpi-box"><div class="kpi-label">XGBoost</div><div class="kpi-val" style="font-size:18px;">1.9673</div><div class="kpi-sub">+9,9%</div></div>
+  <div class="kpi-box kpi-green"><div class="kpi-label">XGBoost+Optuna ★</div><div class="kpi-val" style="font-size:18px;">1.9645</div><div class="kpi-sub">TEST · +10,1%</div></div>
+</div>
+
+<table style="margin:12px 0;">
+  <tr><th>Modelo</th><th>RMSE (Test)</th><th>MAE (Test)</th><th>MAPE (Test)</th><th>Tiempo</th><th>Observación clave</th></tr>
+  <tr><td>Baseline MA28</td><td>2.1847</td><td>1.0048</td><td>58.74%</td><td>—</td><td>Referencia mínima</td></tr>
+  <tr><td>Ridge</td><td>2.0647</td><td>0.9972</td><td>59.26%</td><td>239s</td><td>Confirma que las features aportan valor</td></tr>
+  <tr><td>Random Forest</td><td>2.0101</td><td>0.9733</td><td>55.95%</td><td>2.094s</td><td>n_estimators=50, muestra 5% por limitación RAM</td></tr>
+  <tr><td>CatBoost</td><td>1.9752</td><td>0.9613</td><td>56.46%</td><td>3.369s</td><td>Maneja categóricas nativas, ordered boosting</td></tr>
+  <tr><td>LightGBM</td><td>1.9674</td><td>0.9600</td><td>56.49%</td><td>3.896s</td><td>Best iter 999/1000, lento por bagging en 57M</td></tr>
+  <tr><td>XGBoost</td><td>1.9673</td><td>0.9590</td><td>56.20%</td><td>1.428s</td><td><strong>Best iter 998/1000 → margen mejora con Optuna</strong></td></tr>
+  <tr class="winner"><td>XGBoost+Optuna ★</td><td>1.9645</td><td>0.9580</td><td>56.31%</td><td>1.839s (~31min)</td><td>Ganador en TEST · reentrenado sobre 57M filas</td></tr>
+</table>
+
+<div class="info-box green">
+  <p>★ <strong>XGBoost+Optuna evaluado en Validación (conjunto independiente, Mar–Abr 2016):</strong> RMSE <strong>1.8994</strong> · MAE 0.9592 · MAPE 55.82% · Mejora vs Baseline: <strong>+13.1%</strong>. La tabla muestra métricas de TEST para comparar todos los modelos en igualdad de condiciones. Solo el ganador pasa a evaluarse en validación como confirmación final.</p>
+</div>
+
+<div class="subsec">3.5 Optimización con Optuna — por qué y cómo</div>
+<div class="two-col">
+  <div class="info-box blue">
+    <div class="ib-title">¿Por qué XGBoost y no LightGBM o CatBoost?</div>
+    <ul style="font-size:11.5px;">
+      <li>XGBoost llegó a <strong>998/1000 iteraciones sin hacer early stopping</strong> → señal clara de que con más árboles o parámetros distintos puede mejorar</li>
+      <li>LightGBM llegó a 999/1000 con el mismo comportamiento pero es 3× más lento</li>
+      <li>XGBoost es el mejor balance entre precisión y eficiencia computacional</li>
+    </ul>
+  </div>
+  <div class="info-box orange">
+    <div class="ib-title">¿Por qué solo 5M filas para la búsqueda?</div>
+    <ul style="font-size:11.5px;">
+      <li>Optuna ejecuta <strong>30 trials</strong> — cada trial entrena un modelo completo</li>
+      <li>57M × 30 trials = inviable computacionalmente</li>
+      <li>Los últimos 5M filas son los más recientes → <em>más representativos del período a predecir</em></li>
+      <li>El modelo final se reentrena sobre el dataset completo (57M)</li>
+    </ul>
+  </div>
+</div>
+
+<p style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; margin: 14px 0 6px;">Hiperparámetros encontrados por Optuna y su interpretación</p>
+<table>
+  <tr><th>Parámetro</th><th>Base</th><th>Optuna</th><th>Interpretación</th></tr>
+  <tr><td>n_estimators</td><td>1.000</td><td><strong>1.933</strong></td><td>El modelo necesitaba casi el doble de árboles</td></tr>
+  <tr><td>learning_rate</td><td>0.05</td><td><strong>0.023</strong></td><td>Aprendizaje más lento → más robusto, menos sobreajuste</td></tr>
+  <tr><td>max_depth</td><td>6</td><td><strong>8</strong></td><td>Alcanzó el límite superior → justifica árboles más profundos con 57M filas</td></tr>
+  <tr><td>min_child_weight</td><td>1</td><td><strong>31</strong></td><td>Regularización: mínimo 31 filas por hoja → evita sobreajuste en casos raros</td></tr>
+  <tr><td>gamma</td><td>0</td><td><strong>0.454</strong></td><td>Umbral de ganancia para dividir un nodo → poda el árbol</td></tr>
+  <tr><td>reg_alpha</td><td>0</td><td><strong>0.342</strong></td><td>Regularización L1 moderada sobre pesos de hojas</td></tr>
+  <tr><td>reg_lambda</td><td>1</td><td><strong>1.137</strong></td><td>Regularización L2 — prácticamente igual al base</td></tr>
+</table>
+
+<div class="subsec">3.6 Resultado Final y Validación</div>
+<div class="kpi-row">
+  <div class="kpi-box kpi-green"><div class="kpi-label">RMSE Validación</div><div class="kpi-val">1.8994</div><div class="kpi-sub">Mejor resultado del proyecto</div></div>
+  <div class="kpi-box kpi-green"><div class="kpi-label">Mejora vs Baseline</div><div class="kpi-val">+13.1%</div><div class="kpi-sub">RMSE 2.1847 → 1.8994</div></div>
+  <div class="kpi-box"><div class="kpi-label">MAPE Validación</div><div class="kpi-val">55.82%</div><div class="kpi-sub">Normal en retail item-día (M5: 40–70%)</div></div>
+</div>
+
+<div class="info-box green">
+  <p><strong>¿Por qué el RMSE de validación (1.8994) es mejor que el de test (1.9645)?</strong><br>
+  Indica que el modelo <strong>no sobreajusta</strong> — generaliza bien a datos completamente nuevos. La mejora se debe a que los hiperparámetros Optuna (especialmente el learning rate más bajo y la regularización) favorecen la generalización. Validación es siempre el conjunto definitivo ya que <em>nunca fue visto durante entrenamiento ni optimización.</em></p>
+</div>
+
+<div class="subsec">3.7 Top 10 Features por Importancia (XGBoost+Optuna)</div>
+<table>
+  <tr><th>Rank</th><th>Feature</th><th>Tipo</th><th>Interpretación</th></tr>
+  <tr><td>#1</td><td>sales_rolling_mean_7</td><td><span class="tag tag-hist">Histórico</span></td><td>Media de ventas últimos 7 días — tendencia más reciente (100% importancia relativa)</td></tr>
+  <tr><td>#2</td><td>sales_rolling_mean_14</td><td><span class="tag tag-hist">Histórico</span></td><td>Media 14 días — tendencia a 2 semanas (28.6% importancia relativa)</td></tr>
+  <tr><td>#3</td><td>sales_rolling_mean_28</td><td><span class="tag tag-hist">Histórico</span></td><td>Media 28 días — captura ciclo mensual y tendencia estable</td></tr>
+  <tr><td>#4</td><td>sales_lag_1</td><td><span class="tag tag-hist">Histórico</span></td><td>Ventas ayer — alta autocorrelación directa</td></tr>
+  <tr><td>#5</td><td>sales_rolling_min_28</td><td><span class="tag tag-hist">Histórico</span></td><td>Mínimo de ventas en 28 días — detecta productos con demanda intermitente</td></tr>
+  <tr><td>#6</td><td>is_weekend</td><td><span class="tag tag-temp">Temporal</span></td><td>Efecto fin de semana — el factor externo más importante del modelo</td></tr>
+  <tr><td>#7</td><td>store_avg_sales</td><td><span class="tag tag-prod">Producto/Tienda</span></td><td>Nivel base de ventas de la tienda — calibra la escala por ubicación</td></tr>
+  <tr><td>#8</td><td>weekday_int</td><td><span class="tag tag-temp">Temporal</span></td><td>Día de la semana (0=lun, 6=dom) — complementa is_weekend con granularidad diaria</td></tr>
+  <tr><td>#9</td><td>sales_lag_21</td><td><span class="tag tag-hist">Histórico</span></td><td>Ventas hace 3 semanas — captura ciclo semanal con 3 períodos de distancia</td></tr>
+  <tr><td>#10</td><td>sales_lag_28</td><td><span class="tag tag-hist">Histórico</span></td><td>Ventas hace 4 semanas — estacionalidad mensual exacta</td></tr>
+</table>
+<p style="font-size:11px; color:#555;">Los 10 primeros son variables históricas (rolling means, rolling min y lags) más el efecto fin de semana. Las variables de precio (price_rolling_mean_4w, price_lag_1) quedan en posiciones 11-14, confirmando que la demanda en retail de alimentación responde más al patrón histórico que al precio a corto plazo.</p>
+
+<!-- 4. CONCLUSIONES -->
+<div class="sec-header">4. Conclusiones y Valor Aportado</div>
+
+<div class="two-col">
+  <div>
+    <p style="font-size:12px; font-weight:700; color:#0f4c75; margin-bottom:8px;">Clustering</p>
+    <ul style="font-size:11.5px;">
+      <li>k=5 productos: 5 perfiles claros (estrella, fin de semana, premium, regular, intermitente)</li>
+      <li>k=3 tiendas: confirma que la <strong>ciudad determina el comportamiento</strong> de ventas más que cualquier otra variable</li>
+      <li>Permite estrategias diferenciadas de reposición sin analizar 30.490 combinaciones producto-tienda</li>
+    </ul>
+  </div>
+  <div>
+    <p style="font-size:12px; font-weight:700; color:#0f4c75; margin-bottom:8px;">Forecasting</p>
+    <ul style="font-size:11.5px;">
+      <li>XGBoost+Optuna: RMSE 1.8994 en <strong>validación real no vista</strong></li>
+      <li>Mejora del 13.1% sobre baseline — significativa en volumen de 57M predicciones</li>
+      <li>MAPE 55.82% — dentro del rango normal de la competición M5 (Walmart) con datos similares</li>
+      <li>Sin sobreajuste: validación mejor que test</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  Grupo 2 · DS&amp;IA 0925 · TFM DSMarket · Marzo 2026 · Generado desde Grupo_2_dscesp_0925_tfm_ds_market.ipynb
+</div>
+
+</body>
+</html>

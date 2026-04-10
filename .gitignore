@@ -23,17 +23,12 @@ env/
 Thumbs.db
 desktop.ini
 
-# Notebooks files
-notebooks_individuales/
-
 # Data files
-src/
+src/*
+!src/visualization/
 
 # Models
 models/*.pkl
-
-# Reports
-reports/
 
 # Agents AI
 .claude
